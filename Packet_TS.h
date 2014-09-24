@@ -5,6 +5,7 @@
 
 class DataBlock_TsHeader:public DataBlock
 {
+public:
 	unsigned parseData(uchar *pointer, unsigned length, unsigned offset=0);
 
 	inline uint8 sync_byte()const;
@@ -115,13 +116,12 @@ public:
 	uint8 splice_type()const;
 	uint64 DTS_next_AU()const;
 
-	//负载
 	uchar* payloadData()const;
 	uint8 payloadLen()const;
 private:
 	DataBlock_TsHeader header;
 	DataBlock_AdaptionField adaptionField;
-	DataBlock payload;
+	DataBlock payload;//Maybe it will be stuff byte
 
 	uchar *adaptation_field;//xxxOffset()
 	uchar *pcrVal;
@@ -139,7 +139,7 @@ private:
 class PacketTS:public Packet_TS
 {
 public:
-	unsigned parseData(const uchar* data,unsigned len);//将数据拷入后再分析
+	unsigned parseData(const uchar* data,unsigned len);
 private:
 	uchar rawData[1024];
 };

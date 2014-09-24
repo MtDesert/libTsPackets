@@ -8,74 +8,20 @@ Packet_TS::Packet_TS(){reset();}
 unsigned Packet_TS::parseData(uchar *pointer, unsigned length, unsigned offset)
 {
 	DataBlock::parseData(pointer,length,offset);
+	unsigned pos=header.parseData(pointer,length,offset);
+	if(pos==0)return 0;
+	pointer += pos;
+	length -= pos;
+	offset += pos;
 
-	if(length<4)return 0;
-	if(sync_byte()!=0x47)return 0;
-	if(length!=188 && length!=192 && length!=204)return 0;
-
-	int pos=4;
-	if(adaptation_field_control() & 0x2)
-	{
-		adaptation_field=&dataPointer[4];
-		pos+=1;
-		if(adaptation_field_length()>0)
-		{
-			pos+=1;
-			if(PCR_flag())
-			{
-				pcrVal=&dataPointer[pos];
-				pos+=6;
-			}
-			if(OPCR_flag())
-			{
-				opcrVal=&dataPointer[pos];
-				pos+=6;
-			}
-			if(splicing_point_flag())
-			{
-				splice=&dataPointer[pos];
-				pos+=1;
-			}
-			if(transport_private_data_flag())
-			{
-				transport_private_data_len=&dataPointer[pos];
-				pos+=transport_private_data_length()+1;
-			}
-			if(adaptation_field_extension_flag())
-			{
-				adaptation_field_extension=&dataPointer[pos];
-				pos+=2;
-				if(ltw_flag())
-				{
-					ltw=&dataPointer[pos];
-					pos+=2;
-				}
-				if(piecewise_rate_flag())
-				{
-					piecewiseRate=&dataPointer[pos];
-					pos+=3;
-				}
-				if(seamless_splice_flag())
-				{
-					seamless_splice=&dataPointer[pos];
-					pos+=5;
-				}
-			}
-			stuffing_byte=adaptation_field+1+adaptation_field_length();
-			pos=4+1+adaptation_field_length();
-		}
-	}
-	if((adaptation_field_control() & 0x1))
-	{
-		payload=&dataPointer[pos];
-	}
-	return len;
+	pos=adaptionField.parseData(pointer,length,offset);
 }
 
 unsigned DataBlock_TsHeader::parseData(uchar *pointer, unsigned length, unsigned offset)
 {
 	DataBlock::parseData(pointer,length,offset);
 	if(dataLength<4)return 0;
+	if(sync_byte()!=0x47)return 0;
 	dataLength=4;
 	return dataLength;
 }
@@ -113,13 +59,10 @@ void DataBlock_TsHeader::setTransport_scrambling_control(uint8 value){dataPointe
 uint8 DataBlock_TsHeader::adaptation_field_control()const{return (dataPointer[3]&0x30)>>4;}
 
 uint8 DataBlock_TsHeader::continuity_counter()const{return dataPointer[3]&0x0F;}
-void DataBlock_TsHeader::setContinuity_counter(uint8 value)
-{
-	if(value>0x0F)return false;
-
-}
+void DataBlock_TsHeader::setContinuity_counter(uint8 value){dataPointer[3]=value&0x0F;}
 
 uint8 Packet_TS::adaptation_field_length()const{return adaptation_field[0];}
+void Packet_TS::setAdaptation_field_length(uint8 value){adaptation_field[0]=}
 //flag
 bool Packet_TS::discontinuity_indicator()const{return adaptation_field[1]&0x80;}
 bool Packet_TS::random_access_indicator()const{return adaptation_field[1]&0x40;}
