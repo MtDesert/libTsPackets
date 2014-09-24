@@ -29,27 +29,6 @@ unsigned DataBlock_TsHeader::parseData(uchar *pointer, unsigned length, unsigned
 uint8 DataBlock_TsHeader::sync_byte()const{return dataPointer[0];}
 void DataBlock_TsHeader::setSync_byte(uint8 value){dataPointer[0]=value;}
 
-bool DataBlock_TsHeader::transport_error_indicator()const{return dataPointer[1]&0x80;}
-void DataBlock_TsHeader::setTransport_error_indicator(bool value)
-{
-	if(value)dataPointer[1]|=0x80;
-	else dataPointer[1]&=0x7F;
-}
-
-bool DataBlock_TsHeader::payload_unit_start_indicator()const{return dataPointer[1]&0x40;}
-void DataBlock_TsHeader::setPayload_unit_start_indicator(bool value)
-{
-	if(value)dataPointer[1]|=0x40;
-	else dataPointer[1]&=0xBF;
-}
-
-bool DataBlock_TsHeader::transport_priority()const{return dataPointer[1]&0x20;}
-void DataBlock_TsHeader::setTransport_priority(bool value)
-{
-	if(value)dataPointer[1]|=0x20;
-	else dataPointer[1]&=0xDF;
-}
-
 uint16 DataBlock_TsHeader::pid()const{return getUInt16(2,false)&0x1FFF;}
 void DataBlock_TsHeader::setPid(uint16 value){setUInt16(2,value&0x1FFF,false);}
 
@@ -62,7 +41,7 @@ uint8 DataBlock_TsHeader::continuity_counter()const{return dataPointer[3]&0x0F;}
 void DataBlock_TsHeader::setContinuity_counter(uint8 value){dataPointer[3]=value&0x0F;}
 
 uint8 Packet_TS::adaptation_field_length()const{return adaptation_field[0];}
-void Packet_TS::setAdaptation_field_length(uint8 value){adaptation_field[0]=}
+//void Packet_TS::setAdaptation_field_length(uint8 value){adaptation_field[0]}
 //flag
 bool Packet_TS::discontinuity_indicator()const{return adaptation_field[1]&0x80;}
 bool Packet_TS::random_access_indicator()const{return adaptation_field[1]&0x40;}
@@ -144,14 +123,7 @@ uint64 Packet_TS::DTS_next_AU()const
 		(((uint64)seamless_splice[4]&0xFE)>>1);
 }
 
-uchar* Packet_TS::payloadData()const{return payload;}
-uint8 Packet_TS::payloadLen()const
-{
-	if(!payload)return 0;
-	return dataLength-(payload-dataPointer);
-}
-
-unsigned Packet_TS::reset()
+/*unsigned Packet_TS::reset()
 {
 	adaptation_field=NULL;
 	pcrVal=NULL;
@@ -165,7 +137,7 @@ unsigned Packet_TS::reset()
 	stuffing_byte=NULL;
 	payload=NULL;
 	return 0;
-}
+}*/
 
 unsigned PacketTS::parseData(const uchar *data,unsigned len)
 {

@@ -11,17 +11,18 @@ public:
 	inline uint8 sync_byte()const;
 	inline void setSync_byte(uint8 value=0x47);
 
-	inline bool transport_error_indicator()const;
-	inline void setTransport_error_indicator(bool value);
-
-	inline bool payload_unit_start_indicator()const;
-	inline void setPayload_unit_start_indicator(bool value);
-
-	inline bool transport_priority()const;
-	inline void setTransport_priority(bool value);
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportErrorIndicator,1,0)
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(PayloadUnitStartIndicator,1,1)
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportPriority,1,2)
 
 	inline uint16 pid()const;
 	inline void setPid(uint16 value);
+
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportScramblingControl_0,3,0)
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportScramblingControl_1,3,1)
+
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(AdaptationFieldControl_adaptationField,3,2)
+	DATABLOCK_BOOL_GET_SET_BIGENDIAN(AdaptationFieldControl_payload,3,3)
 
 	inline uint8 transport_scrambling_control()const;
 	inline void setTransport_scrambling_control(uint8 value);
@@ -34,6 +35,7 @@ public:
 };
 class DataBlock_AdaptionField:public DataBlock
 {
+public:
 	unsigned parseData(uchar *pointer, unsigned length, unsigned offset);
 
 	uint8 adaptation_field_length()const;
@@ -115,9 +117,6 @@ public:
 	//seamless_splice_flag
 	uint8 splice_type()const;
 	uint64 DTS_next_AU()const;
-
-	uchar* payloadData()const;
-	uint8 payloadLen()const;
 private:
 	DataBlock_TsHeader header;
 	DataBlock_AdaptionField adaptionField;

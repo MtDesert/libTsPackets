@@ -7,10 +7,6 @@
 #include <list>
 using namespace std;
 
-/**
- * @brief 描述子,用于携带描述信息的
- * 一个描述子都会带有描述类型,描述长度,描述正文三个部分,本类有很多方法
- */
 class Descriptor:public DataBlock
 {
 public:
@@ -22,19 +18,19 @@ public:
 	uint8 descriptor_length()const;
 
 	//0x40
-	string networkName()const;//网络名称
+	string networkName()const;
 
 	//0x43
-	uint32 frequency()const;//频率
+	uint32 frequency()const;
 	uint16 orbital_position()const;
-	uint8 west_east_flag()const;//西东标记
+	uint8 west_east_flag()const;
 	uint8 polarization()const;
 	uint8 roll_off()const;
 	uint8 modulation_system()const;
 	uint8 modulation_type()const;
 	uint32 symbol_rate()const;
 	uint8 FEC_inner()const;
-	
+
 	//0x44
 	//uint32 frequency()const; 0x43
 	uint8 FEC_outer()const;

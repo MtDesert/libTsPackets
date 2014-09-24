@@ -94,7 +94,6 @@ uint8 Descriptor::input_stream_identifier()const
 	return scrambling_sequence_selector()?dataPointer[6]:dataPointer[3];
 }
 
-//ÃèÊö±í
 unsigned DescriptorsList::parseData(uchar *pointer, unsigned length, unsigned offset)
 {
 	DataBlock::parseData(pointer,length,offset);
