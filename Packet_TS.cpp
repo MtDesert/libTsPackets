@@ -21,24 +21,24 @@ unsigned DataBlock_TsHeader::parseData(uchar *pointer, unsigned length, unsigned
 {
 	DataBlock::parseData(pointer,length,offset);
 	if(dataLength<4)return 0;
-	if(sync_byte()!=0x47)return 0;
+	if(getSyncByte()!=0x47)return 0;
 	dataLength=4;
 	return dataLength;
 }
 
-uint8 DataBlock_TsHeader::sync_byte()const{return dataPointer[0];}
-void DataBlock_TsHeader::setSync_byte(uint8 value){dataPointer[0]=value;}
+/*uint8 DataBlock_TsHeader::sync_byte()const{return dataPointer[0];}
+void DataBlock_TsHeader::setSync_byte(uint8 value){dataPointer[0]=value;}*/
 
-uint16 DataBlock_TsHeader::pid()const{return getUInt16(2,false)&0x1FFF;}
-void DataBlock_TsHeader::setPid(uint16 value){setUInt16(2,value&0x1FFF,false);}
+//uint16 DataBlock_TsHeader::pid()const{return getUInt16(2,false)&0x1FFF;}
+//void DataBlock_TsHeader::setPid(uint16 value){setUInt16(2,value&0x1FFF,false);}
 
-uint8 DataBlock_TsHeader::transport_scrambling_control()const{return (dataPointer[3]&0xC0)>>6;}
+/*uint8 DataBlock_TsHeader::transport_scrambling_control()const{return (dataPointer[3]&0xC0)>>6;}
 void DataBlock_TsHeader::setTransport_scrambling_control(uint8 value){dataPointer[3]=(value<<6);}
 
-uint8 DataBlock_TsHeader::adaptation_field_control()const{return (dataPointer[3]&0x30)>>4;}
+uint8 DataBlock_TsHeader::adaptation_field_control()const{return (dataPointer[3]&0x30)>>4;}*/
 
-uint8 DataBlock_TsHeader::continuity_counter()const{return dataPointer[3]&0x0F;}
-void DataBlock_TsHeader::setContinuity_counter(uint8 value){dataPointer[3]=value&0x0F;}
+/*uint8 DataBlock_TsHeader::continuity_counter()const{return dataPointer[3]&0x0F;}
+void DataBlock_TsHeader::setContinuity_counter(uint8 value){dataPointer[3]=value&0x0F;}*/
 
 uint8 Packet_TS::adaptation_field_length()const{return adaptation_field[0];}
 //void Packet_TS::setAdaptation_field_length(uint8 value){adaptation_field[0]}

@@ -8,63 +8,32 @@ class DataBlock_TsHeader:public DataBlock
 public:
 	unsigned parseData(uchar *pointer, unsigned length, unsigned offset=0);
 
-	inline uint8 sync_byte()const;
-	inline void setSync_byte(uint8 value=0x47);
-
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportErrorIndicator,1,0)
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(PayloadUnitStartIndicator,1,1)
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportPriority,1,2)
-
-	inline uint16 pid()const;
-	inline void setPid(uint16 value);
-
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportScramblingControl_0,3,0)
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(TransportScramblingControl_1,3,1)
-
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(AdaptationFieldControl_adaptationField,3,2)
-	DATABLOCK_BOOL_GET_SET_BIGENDIAN(AdaptationFieldControl_payload,3,3)
-
-	inline uint8 transport_scrambling_control()const;
-	inline void setTransport_scrambling_control(uint8 value);
-
-	inline uint8 adaptation_field_control()const;
-	inline void setAdaptation_field_control(uint8 value);
-
-	inline uint8 continuity_counter()const;
-	inline void setContinuity_counter(uint8 value);
+	DATABLOCK_CUSTOM_ATTRIBUTE_BIGENDIAN(SyncByte,uint8,0)
+	DATABLOCK_BOOL_BIGENDIAN(TransportErrorIndicator,1,0)
+	DATABLOCK_BOOL_BIGENDIAN(PayloadUnitStartIndicator,1,1)
+	DATABLOCK_BOOL_BIGENDIAN(TransportPriority,1,2)
+	DATABLOCK_BITS_VALUE_BIGENDIAN(Pid,1,3,13)
+	DATABLOCK_BOOL_BIGENDIAN(TransportScramblingControl_0,3,0)
+	DATABLOCK_BOOL_BIGENDIAN(TransportScramblingControl_1,3,1)
+	DATABLOCK_BOOL_BIGENDIAN(AdaptationFieldControl_adaptationField,3,2)
+	DATABLOCK_BOOL_BIGENDIAN(AdaptationFieldControl_payload,3,3)
+	DATABLOCK_BITS_VALUE_BIGENDIAN(ContinuityCounter,3,4,4)
 };
 class DataBlock_AdaptionField:public DataBlock
 {
 public:
 	unsigned parseData(uchar *pointer, unsigned length, unsigned offset);
 
-	uint8 adaptation_field_length()const;
-	void setAdaptation_field_length(uint8 value);
+	DATABLOCK_BITS_VALUE_BIGENDIAN(AdaptationFieldLength,0,0,8)
 
-	//flag
-	bool discontinuity_indicator()const;
-	void setDiscontinuity_indicator(bool value);
-
-	bool random_access_indicator()const;
-	void setRandom_access_indicator(bool value);
-
-	bool elementary_stream_priority_indicator()const;
-	void setElementary_stream_priority_indicator(bool value);
-
-	bool PCR_flag()const;
-	void setPCR_flag(bool value);
-
-	bool OPCR_flag()const;
-	void setOPCR_flag(bool value);
-
-	bool splicing_point_flag()const;
-	void splicing_point_flag(bool value);
-
-	bool transport_private_data_flag()const;
-	void setTransport_private_data_flag(bool value);
-
-	bool adaptation_field_extension_flag()const;
-	void setAdaptation_field_extension_flag(bool value);
+	DATABLOCK_BOOL_BIGENDIAN(DiscontinuityIndicator,1,0)
+	DATABLOCK_BOOL_BIGENDIAN(RandomAccessIndicator,1,1)
+	DATABLOCK_BOOL_BIGENDIAN(ElementaryStreamPriorityIndicator,1,2)
+	DATABLOCK_BOOL_BIGENDIAN(PcrFlag,1,3)
+	DATABLOCK_BOOL_BIGENDIAN(OpcrFlag,1,4)
+	DATABLOCK_BOOL_BIGENDIAN(SplicingPointFlag,1,5)
+	DATABLOCK_BOOL_BIGENDIAN(TransportPrivateDataFlag,1,6)
+	DATABLOCK_BOOL_BIGENDIAN(AdaptationFieldExtentionFlag,1,7)
 };
 
 class Packet_TS:public DataBlock
